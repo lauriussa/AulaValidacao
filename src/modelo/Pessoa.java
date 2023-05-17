@@ -5,6 +5,7 @@
 package modelo;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,9 +21,9 @@ public class Pessoa extends Entidade implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
     @NotBlank(message = "O nome não pode estar em branco")
     @Size(min = 3, max = 90, message = "O nome deve conter entre 3 a 90 caracteres")
+    @Pattern(regexp = "[A-zÀ-ü ]{3,90}", message = "Nome invalido!")
     private String nome;
     
     @DataCpf(message = "CPF Invalido!")
@@ -40,6 +41,7 @@ public class Pessoa extends Entidade implements Serializable {
     @Pattern(regexp = "^\\(?[0-9]{2,3}\\)?\\s[0-9]{4,5}-?[0-9]{4}$", message = "Telefone Invalido!")
     private String telefone; 
     
+    @NotNull(message = "O endereço não pode ser nulo!")
     @OneToOne
     private Endereco endereco;
     
@@ -56,6 +58,7 @@ public class Pessoa extends Entidade implements Serializable {
         this.endereco = endereco;
     }
 
+    @Override
     public Integer getId() {
         return id;
     }
@@ -108,7 +111,34 @@ public class Pessoa extends Entidade implements Serializable {
     public String toString() {
         return "Pessoa{" + "id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", email=" + email + ", telefone=" + telefone + ", endereco=" + endereco + '}';
     }
-    
-    
-    
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 47 * hash + Objects.hashCode(this.id);
+        hash = 47 * hash + Objects.hashCode(this.nome);
+        hash = 47 * hash + Objects.hashCode(this.cpf);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Pessoa other = (Pessoa) obj;
+        if (!Objects.equals(this.nome, other.nome)) {
+            return false;
+        }
+        if (!Objects.equals(this.cpf, other.cpf)) {
+            return false;
+        }
+        return Objects.equals(this.id, other.id);
+    }   
 }

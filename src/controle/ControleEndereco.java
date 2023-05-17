@@ -4,7 +4,9 @@
  */
 package controle;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -26,8 +28,19 @@ public class ControleEndereco {
         dao = new DaoEndereco();
     }
     
-    public void cadastar(){
-        Endereco endereco = new Endereco();
+    public void cadastrar(){
+        Endereco end = new Endereco();
+        setarDados(end);
+        if(cadastroValido(end)){
+            dao.saveOrUpdate(end);
+        }
+    }
+    
+    public void editar(Endereco end){
+        setarDados(end);
+        if(cadastroValido(end)){
+            dao.saveOrUpdate(end);
+        }
     }
     
     public void setarDados(Endereco endereco){
@@ -40,12 +53,20 @@ public class ControleEndereco {
         System.out.println("Informe o numero: ");
         endereco.setNumero(Input.next());
     }
-    
-    public boolean cadastroValido(Endereco endereco){
+        
+    public boolean cadastroValido(Endereco end){
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
-        Set<ConstraintViolation<Endereco>> violations = validator.validate(endereco);
+        Set<ConstraintViolation<Endereco>> violations = validator.validate(end);
         
         return !violations.isEmpty();
+    }
+    
+    public Endereco carregarPorId(int id){
+        return (Endereco) dao.findById(id);
+    }
+    
+    public List<Endereco> carregarTodos(){
+        return  dao.findAll().stream().map(e -> (Endereco) e).collect(Collectors.toList());
     }
 }

@@ -33,6 +33,7 @@ public class Endereco extends Entidade implements Serializable {
         this.numero = numero;
     }
 
+    @Override
     public Integer getId() {
         return id;
     }

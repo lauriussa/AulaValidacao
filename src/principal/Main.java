@@ -21,9 +21,10 @@ public class Main {
     public static void main(String[] args) {
         ConexaoBD.getConnection();
         
-        Pessoa p = new Pessoa();
+        /*Pessoa p = new Pessoa();
         
-        p.setCpf("123.456.789-10");
+        p.setNome("Larissá Braun");
+        p.setCpf("11111111111");
         p.setTelefone("(045) 99999-9999");
         p.setEmail(null);
         
@@ -33,7 +34,7 @@ public class Main {
         
         for(ConstraintViolation<Pessoa> violation : violations){
             System.out.println(violation.getMessage());
-        }
+        }*/
     }
     
 }
